@@ -9,6 +9,7 @@ import javax.ws.rs.core.Application;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import dk.kb.netarchivesuite.solrwayback.service.exception.ServiceExceptionMapper;
+import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 
 
 public class SolrWaybackApplication extends Application {
@@ -18,7 +19,8 @@ public class SolrWaybackApplication extends Application {
             JacksonJsonProvider.class,
             SolrWaybackResource.class,
             SolrWaybackResourceWeb.class,
-            ServiceExceptionMapper.class
+            ServiceExceptionMapper.class,
+            OpenApiResource.class
             ));
     }
 
