@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +32,11 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +62,15 @@ import dk.kb.netarchivesuite.solrwayback.util.UrlUtils;
 //No path except the context root+servletpath for the application. Example http://localhost:8080/officemood/services 
 
 @Path("/")
+@OpenAPIDefinition(
+        info = @Info(
+                title = "SolrWayback",
+                version = "5.1.2",
+                description = "SolrWayback API",
+                contact = @Contact(name = "API Support", email = "support@example.com"),
+                license = @License(name = "Apache 2.0", url = "http://www.apache.org/licenses/LICENSE-2.0.html")
+        )
+)
 public class SolrWaybackResource {
 
   private static final Logger log = LoggerFactory.getLogger(SolrWaybackResource.class);
@@ -291,7 +304,8 @@ public class SolrWaybackResource {
 
   @GET
   @Path("/export/linkgraph")    
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)    
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Operation(summary = "Export a link graph.", description = "Exports the created linkgraph.")
   public Response exportLinkGraph(@QueryParam("query") String q) throws SolrWaybackServiceException {
    
     //This is also required even if the option is removed on the web-page.
@@ -310,7 +324,8 @@ public class SolrWaybackResource {
   
   @GET
   @Path("/export/warc")    
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)    
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Operation(summary = "Endpoint for exportin WARCs.")
   public Response exportWarc(@QueryParam("query") String q, @QueryParam("fq") List<String> fq, @QueryParam("gzip") boolean gzip) throws SolrWaybackServiceException {
    
     //This is also required even if the option is removed on the web-page.
@@ -321,8 +336,9 @@ public class SolrWaybackResource {
   }
   
   @GET
-  @Path("/export/warcExpanded")    
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)    
+  @Path("/export/warcExpanded")
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  @Operation(summary = "Endpoint for exporting extended WARCs.")
   public Response exportWarcExpanded(@QueryParam("query") String q, @QueryParam("fq") List<String> fq,  @QueryParam("gzip") boolean gzip) throws SolrWaybackServiceException {
     //This is also required even if the option is removed on the web-page.
     if (!PropertiesLoaderWeb.ALLOW_EXPORT_WARC){ 
@@ -400,7 +416,8 @@ public class SolrWaybackResource {
    */
   @Deprecated   
   @GET
-  @Path("/export/csv")    
+  @Path("/export/csv")
+  @Operation(summary = "DEPRECATED: Export CSV.")
   public Response exportFull(@QueryParam("query") String q,@QueryParam("fields") String fields, @QueryParam("fq") String... filters) throws SolrWaybackServiceException {
     if (!PropertiesLoaderWeb.ALLOW_EXPORT_CSV){ 
       throw new InvalidArgumentServiceException("Export to csv not allowed!");
@@ -419,6 +436,7 @@ public class SolrWaybackResource {
 
   @GET
   @Path("/export/fields")
+  @Operation(summary = "Export fields as CSV.")
   public Response exportFields(@QueryParam("query") String q, 
                                @QueryParam("fields") String fields,
                                @QueryParam("expandResources") Boolean expandResources,
@@ -458,6 +476,7 @@ public class SolrWaybackResource {
    */
   @GET
   @Path("/export/zip")
+  @Operation(summary = "Export query result as ZIP.")
   public Response exportZipContent(@QueryParam("query") String query, @QueryParam("fq") String... filters)
           throws InvalidArgumentServiceException, SolrServerException, IOException {
     if (!PropertiesLoaderWeb.ALLOW_EXPORT_ZIP){
