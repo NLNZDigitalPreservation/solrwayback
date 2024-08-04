@@ -31,6 +31,9 @@ import javax.ws.rs.core.UriInfo;
 import dk.kb.netarchivesuite.solrwayback.service.dto.statistics.QueryPercentilesStatistics;
 import dk.kb.netarchivesuite.solrwayback.service.dto.statistics.QueryStatistics;
 import dk.kb.netarchivesuite.solrwayback.util.UrlUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.brotli.dec.BrotliInputStream;
 import org.slf4j.Logger;
@@ -60,6 +63,7 @@ import dk.kb.netarchivesuite.solrwayback.util.FileUtil;
 
 
 @Path("/frontend/")
+@Tags(@Tag(name = "Frontend"))
 public class SolrWaybackResourceWeb {
 
     
