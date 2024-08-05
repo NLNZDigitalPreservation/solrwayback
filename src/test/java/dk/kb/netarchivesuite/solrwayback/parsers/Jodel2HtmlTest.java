@@ -41,7 +41,7 @@ public class Jodel2HtmlTest {
         if (!testFolder.exists()) {
             assertTrue("The test folder " + testFolder + " should be available", testFolder.mkdirs());
         }
-        UnitTestUtils.saveUTF8(html, new File(testFolder, "index.html"));
+        UnitTestUtils.saveUTF8(html, new File(testFolder, "swagger.html"));
 
         File cssFolder = new File(testFolder, "css");
         if (!cssFolder.exists()) {
@@ -54,7 +54,7 @@ public class Jodel2HtmlTest {
         } catch (IOException e) {
             // TODO: How do we get access to webapp/css/jodel.css from test?
         }
-        System.out.println("Output available as file://" + testFolder + "/index.html");
+        System.out.println("Output available as file://" + testFolder + "/swagger.html");
     }
 */
 }
