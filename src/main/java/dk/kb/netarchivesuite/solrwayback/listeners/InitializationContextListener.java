@@ -20,7 +20,7 @@ import javax.servlet.ServletContextListener;
 public class InitializationContextListener implements ServletContextListener {
 
     private static final Logger log = LoggerFactory.getLogger(InitializationContextListener.class);
-    private static String version;
+    public static String version;
     
     // this is called by the web-container before opening up for requests.(defined in web.xml)
     public void contextInitialized(ServletContextEvent event) {

@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import dk.kb.netarchivesuite.solrwayback.listeners.InitializationContextListener;
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 
@@ -39,7 +40,7 @@ public class SolrWaybackApplication extends Application {
         OpenAPI oas = new OpenAPI();
         Info info = new Info()
                 .title("SolrWayback")
-                .version("5.1.2")
+                .version(InitializationContextListener.version)
                 .summary("Description of the SolrWayback API.")
                 .description("SolrWayback is a web application for browsing historical harvested ARC/WARC files similar to the Internet Archive Wayback Machine. " +
                         "SolrWayback runs on a Solr server containing ARC/WARC files indexed using the warc-indexer")
