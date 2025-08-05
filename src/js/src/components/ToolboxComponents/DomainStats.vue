@@ -88,7 +88,8 @@
 
 <script>
 
-import { mapActions } from 'vuex'
+import { mapActions } from 'pinia'
+import { useNotifierStore } from '../../store/notifier.store'
 import { requestService } from '../../services/RequestService'
 import domainScript from './ToolboxResources/domainStats'
 import StringManipulationUtils from './../../mixins/StringManipulationUtils'
@@ -121,7 +122,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Notifier', {
+    ...mapActions(useNotifierStore, {
       setNotification: 'setNotification'
     }),
 
