@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="chart-container">
-      <button v-if="datasets.length > 0" class="download" @click="downloadOpen = !downloadOpen">
+      <button v-if="this.ngramStore.datasets.length > 0" class="download" @click="downloadOpen = !downloadOpen">
         DOWNLOAD
       </button>
-      <line-chart v-if="datasets.length > 0"
+      <line-chart v-if="this.ngramStore.datasets.length > 0"
                   :chart-data="datacollection"
                   :options="options"
                   :chart-id="'netarchive-chart'"
@@ -21,7 +21,8 @@
   import LineChart from '../chartsCore/chartEngines/LineChart'
   import ChartHelpers from '../chartsCore/chartHelpers'
   import ExportData from '../exporterCSV/ExportData.vue'
-  import {mapState} from 'vuex'
+  import { mapStores } from 'pinia'
+import { useNgramStore } from '../../../store/ngram.store'
 
   export default {
     name: 'NetarchiveChart',
@@ -39,34 +40,35 @@
     },
 
     computed: {
-    ...mapState({
-      query: state => state.Ngram.query,
-      datasets: state => state.Ngram.datasets,
-      searchType:state => state.Ngram.searchType,
-      labels: state => state.Ngram.labels,
-      scale: state => state.Ngram.timeScale
-    })
+    // ...mapState({
+    //   query: state => state.Ngram.query,
+    //   datasets: state => state.Ngram.datasets,
+    //   searchType:state => state.Ngram.searchType,
+    //   labels: state => state.Ngram.labels,
+    //   scale: state => state.Ngram.timeScale
+    // })
+    ...mapStores(useNgramStore)
     },
 
     watch: {
-      datasets: function (newVal) {
-      this.fillData(newVal)
+      'ngramStore.datasets': function (newVal) {
+        this.fillData(newVal)
       },
       
-      searchType: function (newVal) {
-        this.options = ChartHelpers.getChartOptions(newVal, this.scale)
+      'ngramStore.searchType': function (newVal) {
+        this.options = ChartHelpers.getChartOptions(newVal, this.ngramStore.scale)
       },
-      scale: function (newVal) {
-        this.options = ChartHelpers.getChartOptions(this.searchType, this.scale)
+      'ngramStore.scale': function (newVal) {
+        this.options = ChartHelpers.getChartOptions(this.ngramStore.searchType, this.ngramStore.scale)
       }
     },
     
     methods: {
       fillData () {
         this.datacollection = {
-          rawLabels: this.labels,
-          labels: ChartHelpers.getChartLabels(this.labels, this.scale),
-          datasets: ChartHelpers.getChartDataSet(this.datasets)
+          rawLabels: this.ngramStore.labels,
+          labels: ChartHelpers.getChartLabels(this.ngramStore.labels, this.ngramStore.scale),
+          datasets: ChartHelpers.getChartDataSet(this.ngramStore.datasets)
         }
       }
     }
@@ -74,7 +76,7 @@
 </script>
 
 <style lang="scss">
-  @import '../../../assets/styles/charts.scss'; 
+  @use '../../../assets/styles/charts.scss'; 
 
   .download {
     border: 2px solid var(--secondary-bg-color);

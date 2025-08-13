@@ -17,7 +17,7 @@
       <search-box />
       <all-search-results />
       <about-component />
-      <primary-modal v-if="showModal" />
+      <primary-modal v-if="this.modalStore.showModal" />
       <transition name="loading-overlay">
         <div v-if="scrolledFromTop" class="topTopArrow" @click="backToTop">
           ↑
@@ -30,14 +30,16 @@
 </template>
 
 <script>
- import SearchBox from '../components/SearchBox'
- import AboutComponent from '../components/AboutComponent'
- import AllSearchResults from '../components/searchResults/AllSearchResults'
- import Notifications from '../components/notifications/Notifications'
- import LoadingOverlay from '../components/LoadingOverlay'
+ import SearchBox from '../components/SearchBox.vue'
+ import AboutComponent from '../components/AboutComponent.vue'
+ import AllSearchResults from '../components/searchResults/AllSearchResults.vue'
+ import Notifications from '../components/notifications/Notifications.vue'
+ import LoadingOverlay from '../components/LoadingOverlay.vue'
  import SearchUtils from './../mixins/SearchUtils'
- import { mapState, mapActions } from 'vuex'
- import PrimaryModal from './../components/modalComponents/PrimaryModal'
+ import { mapStores, mapActions } from 'pinia'
+ import { useModalStore } from '../store/modal.store'
+ import { useSearchStore } from '../store/search.store'
+ import PrimaryModal from './../components/modalComponents/PrimaryModal.vue'
  import Configs from '../configs'
 
 export default {
@@ -77,7 +79,8 @@ export default {
     else {
       // If the route was changed and the query is undefined, we reset everything.
       if(to.query.query === undefined) {
-        this.resetState()
+        // this.resetState()
+        this.searchStore.$reset()
       }
     }
     next()
@@ -91,12 +94,13 @@ export default {
         baseUrl: Configs.playbackConfig.solrwaybackBaseURL
   }),
   computed: {
-    ...mapState({
-      searchAppliedFacets: state => state.Search.searchAppliedFacets,
-      query: state => state.Search.query,
-      solrSettings: state => state.Search.solrSettings,
-      showModal: state => state.Modal.showModal
-    }),
+    // ...mapState({
+    //   searchAppliedFacets: state => state.Search.searchAppliedFacets,
+    //   query: state => state.Search.query,
+    //   solrSettings: state => state.Search.solrSettings,
+    //   showModal: state => state.Modal.showModal
+    // }),
+    ...mapStores(useModalStore, useSearchStore)
   },
 
   mounted() {
@@ -104,8 +108,8 @@ export default {
   },
   
   methods: {
-    ...mapActions('Search', {
-      resetState:'resetState',
+    ...mapActions(useSearchStore, {
+      // resetState:'resetState',
       addToSearchAppliedFacets:'addToSearchAppliedFacets',
       emptySearchAppliedFacets:'emptySearchAppliedFacets',
       updateSolrSettingGrouping:'updateSolrSettingGrouping',
